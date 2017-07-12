@@ -38,10 +38,10 @@ function q_learn!(Q, R, gamma, learn_count, goal_state)
     i%100 == 0 && @printf("ite = %d \n", i)
     # 可能な状態遷移
     possible_actions = get_possible_actions(R, state)
-
+         
     # ランダムに行動選択
     action = possible_actions[rand(1:end)]
-
+    
     # Q値更新
     # Q(s,a) = r(s,a) + Gamma * max[Q(next_s, possible_actions)]
     next_state = action
@@ -62,10 +62,14 @@ end
 function run_greedy(Q, R, start_state, goal_state)
   @printf "---------- run greedy ---------- \n"
   state = start_state
+  state_log = []
+  action_log = []
   while state != goal_state
     @printf "current state: %d \n"  state 
+    # 現在の状態において可能な行動を取得
     possible_actions = get_possible_actions(R, state)
-    # get best action which maximaizes Q-value(s, a)
+    
+    # Q-value(s, a)を最大化する行動を選択
     max_Q = 0
     best_action_candidates = []
     for a in possible_actions   
@@ -76,17 +80,23 @@ function run_greedy(Q, R, start_state, goal_state)
         push!(best_action_candidates, a)
       end
     end
-    # get a best action from candidates randomly
+
+    # 最適な候補をランダムに選択 
     best_action = best_action_candidates[rand(1:end)]
     @printf "-> choose action: %d \n" best_action
-    state = best_action # in this example, action value is same as next state
+    push!(state_log, state)
+    push!(action_log, best_action)
+    
+    # この例題では、とったactionの値が次の状態の値と等価
+    state = best_action
     state == goal_state && @printf("state is %d \= goal \n", state)
     state != goal_state && @printf("state is %d \= not_goal \n", state)
   end
+  return [state_log, action_log]
 end
 
-
-function main()
+# reinforcement learning
+function eg_rl_grid()
   # 報酬関数
   R = [ -1 -1 -1 -1 0 -1;
   -1 -1 -1  0 -1 100;
@@ -111,19 +121,29 @@ function main()
   q_learn!(Q, R, gamma, learn_count, goal_state)
   
   # 学習結果
-  run_greedy(Q, R, 1, 6)
-  run_greedy(Q, R, 2, 6)
-  run_greedy(Q, R, 3, 6)
-  run_greedy(Q, R, 4, 6)
-  run_greedy(Q, R, 5, 6)
+  expert_log = []
+  push!(expert_log, run_greedy(Q, R, 1, 6))
+  push!(expert_log, run_greedy(Q, R, 2, 6))
+  push!(expert_log, run_greedy(Q, R, 3, 6))
+  push!(expert_log, run_greedy(Q, R, 4, 6))
+  push!(expert_log, run_greedy(Q, R, 5, 6))
 
   println("R function = ")
   @show DataFrame(R)
 
   println("Q function = ")
   @show DataFrame(Q)
-
+  
+  @show expert_log  
+  return expert_log
 end
 
-main()
 
+# inverse reinforcement learning
+function eg_irl_grid()
+  # 最適経路
+  expert_log = eg_rl_grid()
+end
+
+eg_rl_grid()
+#eg_irl_grid()
