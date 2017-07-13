@@ -2,7 +2,6 @@
 
 using DataFrames
 
-
 doc=
 """
 Q学習: 例題
@@ -104,7 +103,7 @@ function eg_rl_grid()
   -1  0  0 -1  0  -1;
   0 -1 -1  0 -1 100;
   -1  0 -1 -1  0 100]
-
+  
   # 行動価値関数
   Q = zeros(6, 6)
   
@@ -138,6 +137,19 @@ function eg_rl_grid()
   return expert_log
 end
 
+function test()
+  # states
+  grid = zeros(6, 6)
+  n = size(grid)[1] * size(grid)[2]
+  S = eye(n, n)
+  # actions
+  k = 6
+  A = eye(k)
+  P = zeros(k, n, n)
+
+end
+
+
 
 # inverse reinforcement learning
 function eg_irl_grid()
@@ -145,5 +157,5 @@ function eg_irl_grid()
   expert_log = eg_rl_grid()
 end
 
-eg_rl_grid()
-#eg_irl_grid()
+# eg_rl_grid()
+# eg_irl_grid()
