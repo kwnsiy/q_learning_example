@@ -88,7 +88,7 @@ function run_greedy(Q, R, start_state, goal_state)
     push!(state_log, state)
     push!(action_log, best_action)
     
-    # この例題では，とったactionの値が次の状態の値と等価
+    # とったactionの値が次の状態の値と等価
     state = best_action
     state == goal_state && @printf("state is %d \= goal \n", state)
     state != goal_state && @printf("state is %d \= not_goal \n", state)
