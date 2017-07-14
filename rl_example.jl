@@ -46,7 +46,8 @@ function q_learn!(Q, R, gamma, learn_count, goal_state)
     next_state = action
     next_possible_actions = get_possible_actions(R, next_state)
     max_q_next_s = get_maxq_from_possible_actions(Q, next_state, next_possible_actions)
-    Q[state, action] = R[state, action] + gamma * max_q_next_s
+    #Q[state, action] = R[state, action] + gamma * max_q_next_s
+    Q[state, action] = Q[state, action] + 0.9 * (R[state, action] + gamma * max_q_next_s - Q[state, action])
     state = next_state 
 
     # 終了判定
