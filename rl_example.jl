@@ -64,7 +64,7 @@ function run_greedy(Q, R, start_state, goal_state)
   state_log = []
   action_log = []
   while state != goal_state
-    @printf "current state: %d \n"  state 
+    @printf "current state: %d \n"  state - 1
     # 現在の状態において可能な行動を取得
     possible_actions = get_possible_actions(R, state)
     
@@ -81,12 +81,14 @@ function run_greedy(Q, R, start_state, goal_state)
     end
 
     # 最適な候補をランダムに選択 
-    best_action = best_action_candidates[rand(1:end)]
-    @printf "-> choose action: %d \n" best_action
+    # best_action = best_action_candidates[rand(1:end)]
+    # 最も高いQ値を選択
+    best_action = best_action_candidates[end] 
+    @printf "-> choose action: %d \n" best_action - 1
     push!(state_log, state)
     push!(action_log, best_action)
     
-    # この例題では、とったactionの値が次の状態の値と等価
+    # この例題では，とったactionの値が次の状態の値と等価
     state = best_action
     state == goal_state && @printf("state is %d \= goal \n", state)
     state != goal_state && @printf("state is %d \= not_goal \n", state)
@@ -119,6 +121,8 @@ function eg_rl_grid()
   # q学習
   q_learn!(Q, R, gamma, learn_count, goal_state)
   
+  Q = Q / maximum(Q) * 100
+
   # 学習結果
   expert_log = []
   push!(expert_log, run_greedy(Q, R, 1, 6))
@@ -126,6 +130,7 @@ function eg_rl_grid()
   push!(expert_log, run_greedy(Q, R, 3, 6))
   push!(expert_log, run_greedy(Q, R, 4, 6))
   push!(expert_log, run_greedy(Q, R, 5, 6))
+  push!(expert_log, run_greedy(Q, R, 6, 6))
 
   println("R function = ")
   @show DataFrame(R)
@@ -137,20 +142,6 @@ function eg_rl_grid()
   return expert_log
 end
 
-function test()
-  # states
-  grid = zeros(6, 6)
-  n = size(grid)[1] * size(grid)[2]
-  S = eye(n, n)
-  # actions
-  k = 6
-  A = eye(k)
-  P = zeros(k, n, n)
-
-end
-
-
-
 # inverse reinforcement learning
 function eg_irl_grid()
   # 最適経路
@@ -159,3 +150,5 @@ end
 
 # eg_rl_grid()
 # eg_irl_grid()
+
+eg_rl_grid()
