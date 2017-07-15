@@ -12,7 +12,7 @@ doc=
 # gamma 
 gamma = 0.8
 
-# state 
+# state
 n_state = 6
 
 # action 
@@ -79,7 +79,7 @@ for demo_i in collect(1:100)
 
 end
 
-
+# 逆強化学習で得られた報酬関数を用いてQ学習
 R = (sum(w)/sum(sum(w)))' .* f
 Q = zeros(6, 6)
 q_learn!(Q, R, D, gamma, 100, 6)
