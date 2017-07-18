@@ -214,18 +214,6 @@ function eg_rl_grid()
   return expert_log
 end
 
-# 逆強化学習
-#function irl!()
-#
-#
-#
-#end
-
-
-
-#eg_rl_grid()
-#exit()
-
 gamma = 0.8
 
 # state
